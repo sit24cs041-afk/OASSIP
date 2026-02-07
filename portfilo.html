@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Authentication</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .card {
+            width: 360px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            animation: fadeIn 0.8s ease;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00c6ff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #00f2fe;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            color: #00eaff;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #ff4d4d;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .success {
+            color: #7CFC00;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="card" id="loginCard">
+    <h2>Login</h2>
+
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div class="error" id="loginError"></div>
+
+    <div class="link" onclick="showRegister()">Create new account</div>
+</div>
+
+<!-- REGISTER -->
+<div class="card hidden" id="registerCard">
+    <h2>Register</h2>
+
+    <input type="text" id="regUser" placeholder="Username">
+    <input type="password" id="regPass" placeholder="Password">
+
+    <button onclick="register()">Register</button>
+
+    <div class="error" id="regError"></div>
+    <div class="success" id="regSuccess"></div>
+
+    <div class="link" onclick="showLogin()">Back to Login</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card hidden" id="dashboard">
+    <h2>Welcome 🎉</h2>
+    <p style="text-align:center;">You have accessed a secured page.</p>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    function showRegister() {
+        loginCard.classList.add("hidden");
+        registerCard.classList.remove("hidden");
+    }
+
+    function showLogin() {
+        registerCard.classList.add("hidden");
+        loginCard.classList.remove("hidden");
+    }
+
+    function register() {
+        const user = regUser.value;
+        const pass = regPass.value;
+
+        regError.textContent = "";
+        regSuccess.textContent = "";
+
+        if (user === "" || pass === "") {
+            regError.textContent = "All fields are required";
+            return;
+        }
+
+        localStorage.setItem(user, pass);
+        regSuccess.textContent = "Registration successful!";
+        regUser.value = regPass.value = "";
+    }
+
+    function login() {
+        const user = loginUser.value;
+        const pass = loginPass.value;
+
+        loginError.textContent = "";
+
+        if (localStorage.getItem(user) === pass) {
+            loginCard.classList.add("hidden");
+            dashboard.classList.remove("hidden");
+        } else {
+            loginError.textContent = "Invalid username or password";
+        }
+    }
+
+    function logout() {
+        dashboard.classList.add("hidden");
+        loginCard.classList.remove("hidden");
+    }
+</script>
+
+</body>
+</html>

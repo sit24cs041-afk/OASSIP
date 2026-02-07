@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 420px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #43a047;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-info {
+            font-size: 14px;
+        }
+
+        .time {
+            font-size: 11px;
+            color: gray;
+        }
+
+        button.small {
+            padding: 6px 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 13px;
+        }
+
+        .complete {
+            background: #2196F3;
+            color: white;
+        }
+
+        .edit {
+            background: #ff9800;
+            color: white;
+        }
+
+        .delete {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>To-Do App 📝</h2>
+
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button class="add-btn" onclick="addTask()">Add Task</button>
+
+    <h3>Pending Tasks</h3>
+    <ul id="pendingList"></ul>
+
+    <h3>Completed Tasks</h3>
+    <ul id="completedList"></ul>
+</div>
+
+<script>
+    function addTask() {
+        const input = document.getElementById("taskInput");
+        const taskText = input.value.trim();
+
+        if (taskText === "") {
+            alert("Please enter a task");
+            return;
+        }
+
+        const time = new Date().toLocaleString();
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <div class="task-info">
+                <strong>${taskText}</strong>
+                <div class="time">Added: ${time}</div>
+            </div>
+            <div>
+                <button class="small complete" onclick="completeTask(this)">✔</button>
+                <button class="small edit" onclick="editTask(this)">✏</button>
+                <button class="small delete" onclick="deleteTask(this)">🗑</button>
+            </div>
+        `;
+
+        document.getElementById("pendingList").appendChild(li);
+        input.value = "";
+    }
+
+    function completeTask(btn) {
+        const li = btn.parentElement.parentElement;
+        btn.remove(); // remove complete button
+        document.getElementById("completedList").appendChild(li);
+    }
+
+    function deleteTask(btn) {
+        btn.parentElement.parentElement.remove();
+    }
+
+    function editTask(btn) {
+        const li = btn.parentElement.parentElement;
+        const taskText = li.querySelector("strong");
+
+        const newText = prompt("Edit task:", taskText.textContent);
+        if (newText !== null && newText.trim() !== "") {
+            taskText.textContent = newText;
+        }
+    }
+</script>
+
+</body>
+</html>
